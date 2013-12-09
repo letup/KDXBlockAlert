@@ -12,9 +12,9 @@
 - (instancetype)initWithTitle:(NSString *)title
                       message:(NSString *)message
             cancelButtonTitle:(NSString *)cancelButtonTitle
-                  cancelBlock:(void ( ^)())cancelBlock;
+                  cancelAction:(void ( ^)())cancelAction;
 
-- (void)addButtonWithTitle:(NSString *)title actionBlock:(void ( ^)())actionBlock;
+- (void)addButtonWithTitle:(NSString *)title action:(void ( ^)())action;
 - (void)show;
 
 @end

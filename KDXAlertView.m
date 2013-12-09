@@ -11,7 +11,7 @@
     NSMutableArray *_buttonActionBlockArray;
     
     NSString *_cancelButtonTitle;
-    void (^_cancelBlock)();
+    void (^_cancelAction)();
     
     NSString *_title, *_message;
 }
@@ -24,7 +24,7 @@ static NSMutableArray *ActiveInstances = nil;
 - (instancetype)initWithTitle:(NSString *)title
                       message:(NSString *)message
             cancelButtonTitle:(NSString *)cancelButtonTitle
-                  cancelBlock:(void ( ^)())cancelBlock {
+                 cancelAction:(void ( ^)())cancelAction {
 
     static dispatch_once_t pred;
     dispatch_once(&pred, ^{
@@ -36,7 +36,7 @@ static NSMutableArray *ActiveInstances = nil;
         _buttonTitleArray = [NSMutableArray array];
         _buttonActionBlockArray = [NSMutableArray array];
         _cancelButtonTitle = cancelButtonTitle;
-        _cancelBlock = cancelBlock;
+        _cancelAction = [cancelAction copy];
 
         _title = title;
         _message = message;
@@ -44,11 +44,11 @@ static NSMutableArray *ActiveInstances = nil;
     return self;
 }
 
-- (void)addButtonWithTitle:(NSString *)title actionBlock:(void ( ^)())actionBlock {
+- (void)addButtonWithTitle:(NSString *)title action:(void ( ^)())action {
     NSAssert(title, @"Title cannot be nil.");
     [_buttonTitleArray addObject:title];
-    if (actionBlock) {
-        [_buttonActionBlockArray addObject:actionBlock];
+    if (action) {
+        [_buttonActionBlockArray addObject:[action copy]];
     } else {
         [_buttonActionBlockArray addObject:[NSNull null]];
     }
@@ -68,8 +68,8 @@ static NSMutableArray *ActiveInstances = nil;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.cancelButtonIndex) {
-        if (_cancelBlock)
-            _cancelBlock();
+        if (_cancelAction)
+            _cancelAction();
     } else {
         id actionBlock = _buttonActionBlockArray[buttonIndex];
         if (actionBlock && actionBlock != [NSNull null]) {

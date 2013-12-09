@@ -12,10 +12,10 @@
     NSMutableArray *_buttonActionBlockArray;
     
     NSString *_cancelButtonTitle;
-    void (^_cancelActionBlock)();
+    void (^_cancelAction)();
     
     NSString *_destructiveButtonTitle;
-    void (^_destructiveActionBlock)();
+    void (^_destructiveAction)();
     
     NSString *_title;
 }
@@ -27,9 +27,9 @@ static NSMutableArray *ActiveInstances = nil;
 
 - (instancetype)initWithTitle:(NSString *)title
             cancelButtonTitle:(NSString *)cancelButtonTitle
-            cancelActionBlock:(void ( ^)())cancelActionBlock
+                 cancelAction:(void ( ^)())cancelAction
        destructiveButtonTitle:(NSString *)destructiveButtonTitle
-       destructiveActionBlock:(void ( ^)())destructiveActionBlock {
+            destructiveAction:(void ( ^)())destructiveAction; {
 
     static dispatch_once_t pred;
     dispatch_once(&pred, ^{
@@ -41,19 +41,19 @@ static NSMutableArray *ActiveInstances = nil;
         _buttonTitleArray = [NSMutableArray array];
         _buttonActionBlockArray = [NSMutableArray array];
         _cancelButtonTitle = cancelButtonTitle;
-        _cancelActionBlock = cancelActionBlock;
+        _cancelAction = [cancelAction copy];
         _destructiveButtonTitle = destructiveButtonTitle;
-        _destructiveActionBlock = destructiveActionBlock;
+        _destructiveAction = [destructiveAction copy];
         _title = title;
     }
     return self;
 }
 
-- (void)addButtonWithTitle:(NSString *)title actionBlock:(void ( ^)())actionBlock {
+- (void)addButtonWithTitle:(NSString *)title action:(void ( ^)())action {
     NSAssert(title, @"Title cannot be nil.");
     [_buttonTitleArray addObject:title];
-    if (actionBlock) {
-        [_buttonActionBlockArray addObject:[actionBlock copy]];
+    if (action) {
+        [_buttonActionBlockArray addObject:[action copy]];
     } else {
         [_buttonActionBlockArray addObject:[NSNull null]];
     }
@@ -76,11 +76,11 @@ static NSMutableArray *ActiveInstances = nil;
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == actionSheet.cancelButtonIndex) {
-        if (_cancelActionBlock)
-            _cancelActionBlock();
+        if (_cancelAction)
+            _cancelAction();
     } else if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        if (_destructiveActionBlock)
-            _destructiveActionBlock();
+        if (_destructiveAction)
+            _destructiveAction();
     } else {
         int index = buttonIndex;
         if (_destructiveButtonTitle) {

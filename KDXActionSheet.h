@@ -11,11 +11,11 @@
 
 - (instancetype)initWithTitle:(NSString *)title
             cancelButtonTitle:(NSString *)cancelButtonTitle
-            cancelActionBlock:(void ( ^)())cancelActionBlock
+                 cancelAction:(void ( ^)())cancelAction
        destructiveButtonTitle:(NSString *)destructiveButtonTitle
-       destructiveActionBlock:(void ( ^)())destructiveActionBlock;
+            destructiveAction:(void ( ^)())destructiveAction;
 
-- (void)addButtonWithTitle:(NSString *)title actionBlock:(void ( ^)())actionBlock;
+- (void)addButtonWithTitle:(NSString *)title action:(void ( ^)())action;
 
 - (void)showInView:(UIView *)view;
 

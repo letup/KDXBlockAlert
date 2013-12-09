@@ -11,10 +11,10 @@ UIAlertView and UIActionSheet helper for block-based callback usage
                         initWithTitle:@"Error"
                         message:@"Something wrong!"
                         cancelButtonTitle:@"Cancel"
-                        cancelBlock:^{
+                        cancelAction:^{
                             [self dismissViewControllerWithAnimation];
                         }];
-    [av addButtonWithTitle:@"Retey" actionBlock:^{
+    [av addButtonWithTitle:@"Retey" action:^{
         [self retry];
     }];
     [av show];
@@ -25,12 +25,12 @@ UIAlertView and UIActionSheet helper for block-based callback usage
     KDXActionSheet *as = [[KDXActionSheet alloc]
                           initWithTitle:@"Do something"
                           cancelButtonTitle:@"Cacnel"
-                          cancelActionBlock:nil
+                          cancelAction:nil
                           destructiveButtonTitle:@"Delete"
-                          destructiveActionBlock:^{
+                          destructiveAction:^{
                               [model delete];
                           }];
-    [as addButtonWithTitle:@"Share" actionBlock:^{
+    [as addButtonWithTitle:@"Share" action:^{
         [self shareItem:model];
     }];
     [as showInView:self.view];
