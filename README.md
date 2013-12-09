@@ -1,7 +1,7 @@
 KDXBlockAlert
 =============
 
-UIAlertView and UIActionSheet helper for block-based callback usage
+An UIAlertView and UIActionSheet helper for block-based callback usage
 
 ## Example
 
